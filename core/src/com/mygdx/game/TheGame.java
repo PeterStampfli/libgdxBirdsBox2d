@@ -1,33 +1,36 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.utilities.Constants;
+import com.mygdx.game.utilities.Device;
 
-public class TheGame extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	
+public class TheGame extends Game {
+
+	public Device device;
+	public GameScreen gameScreen;
+	public LoadingScreen loadingScreen;
+
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		Box2D.init();
+		device=new Device().createSpriteBatch();
+		device.setLogging(true);
+		device.viewport=new FitViewport(Constants.WORLD_WIDTH,Constants.WORLD_HEIGHT,device.camera);
+
+		gameScreen=new GameScreen(this);
+		loadingScreen=new LoadingScreen(this);
+		setScreen(loadingScreen);
+
+
+
 	}
 
-	@Override
-	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
-	}
-	
+
+
 	@Override
 	public void dispose () {
-		batch.dispose();
-		img.dispose();
+		device.dispose();
 	}
 }
